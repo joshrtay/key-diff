@@ -1,9 +1,4 @@
 /**
- * Imports
- */
-import is from '@weo-edu/is'
-
-/**
  * Constants
  */
 
@@ -27,9 +22,9 @@ function diff (prev, next, effect) {
   let keyToIdx, idxInPrev, before;
 
   while (pStart.idx <= pEnd.idx && nStart.idx <= nEnd.idx) {
-    if (is.undefined(pStart.item)) {
+    if (isUndefined(pStart.item)) {
       pStart = forward(prev, pStart)
-    } else if (is.undefined(pEnd.item)){
+    } else if (isUndefined(pEnd.item)){
       pEnd = back(prev, pEnd)
     } else if (equal(pStart, nStart)){
       effect(change(DIFF_UPDATE, pStart, nStart))
@@ -48,11 +43,11 @@ function diff (prev, next, effect) {
       pEnd = back(prev, pEnd)
       nStart = forward(next, nStart)
     } else {
-      if (is.undefined(keyToIdx)) {
+      if (isUndefined(keyToIdx)) {
         keyToIdx = mapKeyToIdx(prev, prev.idx, pEnd.idx)
       }
       idxInPrev = keyToIdx[key(nStart)]
-      if (is.undefined(idxInPrev)) {
+      if (isUndefined(idxInPrev)) {
         effect(change(DIFF_CREATE, null, nStart, pStart.idx))
       } else {
         effect(change(DIFF_MOVE, prev[idxInPrev], nStart, pStart.idx))
@@ -91,7 +86,7 @@ function back (list, c) {
 
 function change (type, prev, next, pos) {
   let action = {type, prev, next}
-  if (!is.undefined(pos)) {
+  if (!isUndefined(pos)) {
     action.pos = pos
   }
   return action
@@ -112,9 +107,13 @@ function mapKeyToIdx(list, start, end) {
 
   for (i = start; i <= end; ++i) {
     key = list[i].key;
-    if (!is.undefined(key)) map[key] = i;
+    if (!isUndefined(key)) map[key] = i;
   }
   return map;
+}
+
+function isUndefined (val) {
+  return 'undefined' === typeof(val)
 }
 
 diff.CREATE = DIFF_CREATE
