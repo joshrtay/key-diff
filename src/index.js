@@ -117,7 +117,10 @@ function mapKeyToIdx(list, start, end) {
   return map;
 }
 
-diff.types = {DIFF_CREATE, DIFF_UPDATE, DIFF_MOVE, DIFF_REMOVE}
+diff.CREATE = DIFF_CREATE
+diff.UPDATE = DIFF_UPDATE
+diff.MOVE = DIFF_MOVE
+diff.REMOVE = DIFF_REMOVE
 
 /**
  * Exports

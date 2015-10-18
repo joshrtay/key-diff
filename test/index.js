@@ -5,8 +5,6 @@
 import test from 'tape'
 import diff from '../src'
 
-let types = diff.types
-
 /**
  * Tests
  */
@@ -192,17 +190,17 @@ test('swap', (t) => {
 function update(list) {
   return function(action) {
     switch(action.type) {
-      case types.DIFF_CREATE:
+      case diff.CREATE:
         insertAt(list, action.pos, action.next.item)
         break
-      case types.DIFF_REMOVE:
+      case diff.REMOVE:
         remove(list, action.prev.item)
         break
-      case types.DIFF_MOVE:
+      case diff.MOVE:
         patch(list, action.prev.item, action.next.item)
         move(list, action.pos, action.prev.item)
         break
-      case types.DIFF_UPDATE:
+      case diff.UPDATE:
         patch(list, action.prev.item, action.next.item)
         break
     }
