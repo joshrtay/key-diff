@@ -2,7 +2,7 @@
   "name": "key-diff",
   "description": "A list diff algorightm with support for keys",
   "repository": "git://github.com/weo-edu/key-diff.git",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
