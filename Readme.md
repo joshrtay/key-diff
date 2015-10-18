@@ -7,7 +7,7 @@ A list diff algorightm with support for keys
 
 ## Installation
 
-    $ npm install @weo-edu/key-diff
+    $ npm install key-diff
 
 ## License
 
