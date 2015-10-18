@@ -4,7 +4,17 @@
 import is from '@weo-edu/is'
 
 /**
- * key-diff
+ * Constants
+ */
+
+const DIFF_CREATE = 'DIFF_CREATE'
+const DIFF_UPDATE = 'DIFF_UPDATE'
+const DIFF_MOVE = 'DIFF_MOVE'
+const DIFF_REMOVE = 'DIFF_REMOVE'
+
+
+/**
+ * Key diff
  */
 
 function diff (prev, next, effect) {
@@ -22,19 +32,19 @@ function diff (prev, next, effect) {
     } else if (is.undefined(pEnd.item)){
       pEnd = back(prev, pEnd)
     } else if (equal(pStart, nStart)){
-      effect(change('DIFF_UPDATE', pStart, nStart))
+      effect(change(DIFF_UPDATE, pStart, nStart))
       pStart = forward(prev, pStart)
       nStart = forward(next, nStart)
     } else if (equal(pEnd, nEnd)) {
-      effect(change('DIFF_UPDATE', pEnd, nEnd))
+      effect(change(DIFF_UPDATE, pEnd, nEnd))
       pEnd = back(prev, pEnd)
       nEnd = back(next, nEnd)
     } else if (equal(pStart, nEnd)) {
-      effect(change('DIFF_MOVE', pStart, nEnd, pEnd.idx))
+      effect(change(DIFF_MOVE, pStart, nEnd, pEnd.idx))
       pStart = forward(prev, pStart)
       nEnd = back(next, nEnd)
     } else if (equal(pEnd, nStart)) {
-      effect(change('DIFF_MOVE', pEnd, nStart, pStart.idx))
+      effect(change(DIFF_MOVE, pEnd, nStart, pStart.idx))
       pEnd = back(prev, pEnd)
       nStart = forward(next, nStart)
     } else {
@@ -43,9 +53,9 @@ function diff (prev, next, effect) {
       }
       idxInPrev = keyToIdx[key(nStart)]
       if (is.undefined(idxInPrev)) {
-        effect(change('DIFF_CREATE', null, nStart, pStart.idx))
+        effect(change(DIFF_CREATE, null, nStart, pStart.idx))
       } else {
-        effect(change('DIFF_MOVE', prev[idxInPrev], nStart, pStart.idx))
+        effect(change(DIFF_MOVE, prev[idxInPrev], nStart, pStart.idx))
         delete keyToIdx[key(nStart)]
       }
       nStart = forward(next, nStart)
@@ -54,11 +64,11 @@ function diff (prev, next, effect) {
 
   if (pStart.idx > pEnd.idx) {
     for (; nStart.idx <= nEnd.idx; nStart = forward(next, nStart)) {
-        effect(change('DIFF_CREATE', null, nStart, nEnd.idx))
+        effect(change(DIFF_CREATE, null, nStart, nEnd.idx))
     }
   } else if (nStart.idx > nEnd.idx) {
     for(; pStart.idx <= pEnd.idx; pStart = forward(prev, pStart)) {
-      effect(change('DIFF_REMOVE', pStart))
+      effect(change(DIFF_REMOVE, pStart))
     }
   }
 
@@ -106,6 +116,8 @@ function mapKeyToIdx(list, start, end) {
   }
   return map;
 }
+
+diff.types = {DIFF_CREATE, DIFF_UPDATE, DIFF_MOVE, DIFF_REMOVE}
 
 /**
  * Exports
