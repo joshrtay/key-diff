@@ -184,11 +184,25 @@ test('swap', (t) => {
   t.end()
 })
 
+test('complex', (t) => {
+  let a = [{key: 'foo', val: 'one'}, {key: 'bar', val: 'two'}, {key: 'baz', val: 'three'}]
+  let b = [{key: 'bar', val: 'two'}, {key: 'foo', val: 'one'},  {key: 'bat', val: 'four'}]
+  let c = clone(a)
+  let patch = update(c)
+
+  diff(a, b, patch)
+
+  t.deepEqual(c, b)
+
+  t.end()
+})
+
 
 
 
 function update(list) {
   return function(action) {
+    console.log('action type', action.type, action)
     switch(action.type) {
       case diff.CREATE:
         insertAt(list, action.pos, action.next.item)

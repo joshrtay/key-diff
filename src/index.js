@@ -48,9 +48,10 @@ function diff (prev, next, effect) {
       }
       idxInPrev = keyToIdx[key(nStart)]
       if (isUndefined(idxInPrev)) {
-        effect(change(DIFF_CREATE, null, nStart, pStart.idx))
+        console.log('create 1', pStart.idx)
+        effect(change(DIFF_CREATE, null, nStart, nStart.idx))
       } else {
-        effect(change(DIFF_MOVE, prev[idxInPrev], nStart, pStart.idx))
+        effect(change(DIFF_MOVE, prev[idxInPrev], nStart, nStart.idx))
         delete keyToIdx[key(nStart)]
       }
       nStart = forward(next, nStart)
@@ -59,7 +60,8 @@ function diff (prev, next, effect) {
 
   if (pStart.idx > pEnd.idx) {
     for (; nStart.idx <= nEnd.idx; nStart = forward(next, nStart)) {
-        effect(change(DIFF_CREATE, null, nStart, nEnd.idx))
+      console.log('create 2', nEnd.idx)
+      effect(change(DIFF_CREATE, null, nStart, nEnd.idx))
     }
   } else if (nStart.idx > nEnd.idx) {
     for(; pStart.idx <= pEnd.idx; pStart = forward(prev, pStart)) {

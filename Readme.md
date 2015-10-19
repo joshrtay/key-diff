@@ -1,13 +1,51 @@
 
 # key-diff
 
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
+[![Codeship Status for joshrtay/key-diff](https://img.shields.io/codeship/6ecc3110-581f-0133-40c0-26e98ecb9625/master.svg)](https://codeship.com/projects/109614)  [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
 A list diff algorightm with support for keys
 
 ## Installation
 
     $ npm install key-diff
+
+## Usage
+
+```js
+import diff from 'key-diff'
+
+let a = [{key: 'foo', val: 'one'}, {key: 'bar', val: 'two'}, {key: 'baz', val: 'three'}]
+let b = [{key: 'bar', val: 'two'}, {key: 'foo', val: 'one'},  {key: 'bat', val: 'four'}]
+
+let c = clone(a)
+let handler = update(c)
+diff(a, b, handler)
+
+assert.deepEqual(c, b)
+
+function update(list) {
+  return function(action) {
+    switch(action.type) {
+      case diff.CREATE:
+        insertAt(list, action.pos, action.next.item)
+        break
+      case diff.REMOVE:
+        remove(list, action.prev.item)
+        break
+      case diff.MOVE:
+        patch(list, action.prev.item, action.next.item)
+        move(list, action.pos, action.prev.item)
+        break
+      case diff.UPDATE:
+        patch(list, action.prev.item, action.next.item)
+        break
+    }
+  }
+}
+
+// implement patch, insertAt, remove, and move ...
+
+```
 
 ## License
 
