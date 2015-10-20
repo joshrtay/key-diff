@@ -108,6 +108,20 @@ test('remove one', (t) => {
   t.end()
 })
 
+test('remove complex', (t) => {
+  let a = [{key: 'bar', val: 'one'}, {key: 'foo', val: 'two'}, {key: 'bat', val: 'three'}, {key: 'baz', val: 'four'}, {key: 'quz', val: 'five'}]
+  let b = [{key: 'foo', val: 'two'}, {key: 'baz', val: 'four'}]
+  let c = clone(a)
+  let patch = update(c)
+
+  diff(a, b, patch)
+
+  t.deepEqual(c, b)
+
+  t.end()
+})
+
+
 test('update', (t) => {
   let a = [{key: 'foo', val: 'bar'}]
   let b = [{key: 'foo', val: 'box'}]
@@ -201,21 +215,20 @@ test('complex', (t) => {
 
 
 function update(list) {
-  return function(action) {
-    console.log('action type', action.type, action)
-    switch(action.type) {
+  return function(type, prev, next, pos) {
+    switch(type) {
       case diff.CREATE:
-        insertAt(list, action.pos, action.next.item)
+        insertAt(list, pos, next)
         break
       case diff.REMOVE:
-        remove(list, action.prev.item)
+        remove(list, prev)
         break
       case diff.MOVE:
-        patch(list, action.prev.item, action.next.item)
-        move(list, action.pos, action.prev.item)
+        patch(list, prev, next)
+        move(list, pos, prev)
         break
       case diff.UPDATE:
-        patch(list, action.prev.item, action.next.item)
+        patch(list, prev, next)
         break
     }
   }

@@ -27,19 +27,19 @@ function diff (prev, next, effect) {
     } else if (isUndefined(pEnd.item)){
       pEnd = back(prev, pEnd)
     } else if (equal(pStart, nStart)){
-      effect(change(DIFF_UPDATE, pStart, nStart))
+      effect(DIFF_UPDATE, pStart.item, nStart.item)
       pStart = forward(prev, pStart)
       nStart = forward(next, nStart)
     } else if (equal(pEnd, nEnd)) {
-      effect(change(DIFF_UPDATE, pEnd, nEnd))
+      effect(DIFF_UPDATE, pEnd.item, nEnd.item)
       pEnd = back(prev, pEnd)
       nEnd = back(next, nEnd)
     } else if (equal(pStart, nEnd)) {
-      effect(change(DIFF_MOVE, pStart, nEnd, pEnd.idx))
+      effect(DIFF_MOVE, pStart.item, nEnd.item, pEnd.idx)
       pStart = forward(prev, pStart)
       nEnd = back(next, nEnd)
     } else if (equal(pEnd, nStart)) {
-      effect(change(DIFF_MOVE, pEnd, nStart, pStart.idx))
+      effect(DIFF_MOVE, pEnd.item, nStart.item, pStart.idx)
       pEnd = back(prev, pEnd)
       nStart = forward(next, nStart)
     } else {
@@ -48,10 +48,9 @@ function diff (prev, next, effect) {
       }
       idxInPrev = keyToIdx[key(nStart)]
       if (isUndefined(idxInPrev)) {
-        console.log('create 1', pStart.idx)
-        effect(change(DIFF_CREATE, null, nStart, nStart.idx))
+        effect(DIFF_CREATE, null, nStart.item, nStart.idx)
       } else {
-        effect(change(DIFF_MOVE, prev[idxInPrev], nStart, nStart.idx))
+        effect(DIFF_MOVE, prev[idxInPrev], nStart.item, nStart.idx)
         delete keyToIdx[key(nStart)]
       }
       nStart = forward(next, nStart)
@@ -60,12 +59,11 @@ function diff (prev, next, effect) {
 
   if (pStart.idx > pEnd.idx) {
     for (; nStart.idx <= nEnd.idx; nStart = forward(next, nStart)) {
-      console.log('create 2', nEnd.idx)
-      effect(change(DIFF_CREATE, null, nStart, nEnd.idx))
+      effect(DIFF_CREATE, null, nStart.item, nEnd.idx)
     }
   } else if (nStart.idx > nEnd.idx) {
     for(; pStart.idx <= pEnd.idx; pStart = forward(prev, pStart)) {
-      effect(change(DIFF_REMOVE, pStart))
+      effect(DIFF_REMOVE, pStart.item)
     }
   }
 
@@ -79,19 +77,13 @@ function cursor (list, idx) {
 }
 
 function forward (list, c) {
-  return cursor(list, c.idx + 1)
+  c.item = list[++c.idx]
+  return c
 }
 
 function back (list, c) {
-  return cursor(list, c.idx - 1)
-}
-
-function change (type, prev, next, pos) {
-  let action = {type, prev, next}
-  if (!isUndefined(pos)) {
-    action.pos = pos
-  }
-  return action
+  c.item = list[--c.idx]
+  return c
 }
 
 function equal(prev, next) {
