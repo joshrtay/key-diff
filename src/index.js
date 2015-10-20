@@ -12,7 +12,7 @@ const DIFF_REMOVE = 'DIFF_REMOVE'
  * Key diff
  */
 
-function diff (prev, next, effect) {
+function diff (prev, next, effect, equal) {
   let pStart = cursor(prev, 0)
   let pEnd = cursor(prev, prev.length - 1)
 
@@ -20,6 +20,8 @@ function diff (prev, next, effect) {
   let nEnd = cursor(next, next.length - 1)
 
   let keyToIdx, idxInPrev, before;
+
+  equal = equal || defaultEqual
 
   while (pStart.idx <= pEnd.idx && nStart.idx <= nEnd.idx) {
     if (isUndefined(pStart.item)) {
@@ -86,7 +88,7 @@ function back (list, c) {
   return c
 }
 
-function equal(prev, next) {
+function defaultEqual(prev, next) {
   return key(prev) === key(next)
 }
 
