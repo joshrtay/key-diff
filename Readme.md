@@ -24,20 +24,20 @@ diff(a, b, handler)
 assert.deepEqual(c, b)
 
 function update(list) {
-  return function(action) {
-    switch(action.type) {
+  return function(type, prev, next, pos) {
+    switch(type) {
       case diff.CREATE:
-        insertAt(list, action.pos, action.next.item)
+        insertAt(list, pos, next)
         break
       case diff.REMOVE:
-        remove(list, action.prev.item)
+        remove(list, prev)
         break
       case diff.MOVE:
-        patch(list, action.prev.item, action.next.item)
-        move(list, action.pos, action.prev.item)
+        patch(list, prev, next)
+        move(list, pos, prev)
         break
       case diff.UPDATE:
-        patch(list, action.prev.item, action.next.item)
+        patch(list, prev, next)
         break
     }
   }
