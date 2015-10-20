@@ -98,12 +98,9 @@ function back (list, c) {
   return c
 }
 
-
-
 function defaultKey(item, idx) {
   return item.key || idx
 }
-
 
 function isUndefined (val) {
   return 'undefined' === typeof(val)

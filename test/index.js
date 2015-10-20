@@ -204,8 +204,14 @@ test('reverse', (t) => {
   let c = clone(a)
   let patch = update(c)
 
-  diff(a, b, patch)
+  let log = []
 
+  diff(a, b, function (...args) {
+    log.push(args[0])
+    patch(...args)
+  })
+
+  t.deepEqual(log, ['DIFF_MOVE', 'DIFF_MOVE', 'DIFF_MOVE', 'DIFF_UPDATE'])
   t.deepEqual(c, b)
 
   t.end()
