@@ -37,11 +37,11 @@ function diff (prev, next, effect, equal) {
       pEnd = back(prev, pEnd)
       nEnd = back(next, nEnd)
     } else if (equal(pStart, nEnd)) {
-      effect(DIFF_MOVE, pStart.item, nEnd.item, pEnd.idx)
+      effect(DIFF_MOVE, pStart.item, nEnd.item, nEnd.idx)
       pStart = forward(prev, pStart)
       nEnd = back(next, nEnd)
     } else if (equal(pEnd, nStart)) {
-      effect(DIFF_MOVE, pEnd.item, nStart.item, pStart.idx)
+      effect(DIFF_MOVE, pEnd.item, nStart.item, nStart.idx)
       pEnd = back(prev, pEnd)
       nStart = forward(next, nStart)
     } else {

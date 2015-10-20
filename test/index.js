@@ -198,6 +198,19 @@ test('swap', (t) => {
   t.end()
 })
 
+test('reverse', (t) => {
+  let a = [{key: 'foo', val: 'one'}, {key: 'bat', val: 'two'}, {key: 'baz', val: 'three'}, {key: 'qux', val: 'four'}]
+  let b = [{key: 'qux', val: 'four'}, {key: 'baz', val: 'three'}, {key: 'bat', val: 'two'}, {key: 'foo', val: 'one'}]
+  let c = clone(a)
+  let patch = update(c)
+
+  diff(a, b, patch)
+
+  t.deepEqual(c, b)
+
+  t.end()
+})
+
 test('complex', (t) => {
   let a = [{key: 'foo', val: 'one'}, {key: 'bar', val: 'two'}, {key: 'baz', val: 'three'}]
   let b = [{key: 'bar', val: 'two'}, {key: 'foo', val: 'one'},  {key: 'bat', val: 'four'}]
