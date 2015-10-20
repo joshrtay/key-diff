@@ -12,7 +12,7 @@ const DIFF_REMOVE = 'DIFF_REMOVE'
  * Key diff
  */
 
-function diff (prev, next, effect, equal) {
+function diff (prev, next, effect, key) {
   let pStart = cursor(prev, 0)
   let pEnd = cursor(prev, prev.length - 1)
 
@@ -21,7 +21,7 @@ function diff (prev, next, effect, equal) {
 
   let keyToIdx, idxInPrev, before;
 
-  equal = equal || defaultEqual
+  key = key || defaultKey
 
   while (pStart.idx <= pEnd.idx && nStart.idx <= nEnd.idx) {
     if (isUndefined(pStart.item)) {
@@ -65,6 +65,20 @@ function diff (prev, next, effect, equal) {
     effect(DIFF_REMOVE, prev[idxInPrev])
   }
 
+  function equal(prev, next) {
+    return key(prev.item, prev.idx) === key(next.item, next.idx)
+  }
+
+  function mapKeyToIdx(list, start, end) {
+    let i
+    let map = {}
+
+    for (i = start; i <= end; ++i) {
+      map[key(list[i])] = i;
+    }
+    return map;
+  }
+
 }
 
 function cursor (list, idx) {
@@ -84,23 +98,12 @@ function back (list, c) {
   return c
 }
 
-function defaultEqual(prev, next) {
-  return key(prev.item, prev.idx) === key(next.item, next.idx)
-}
 
-function key(item, idx) {
+
+function defaultKey(item, idx) {
   return item.key || idx
 }
 
-function mapKeyToIdx(list, start, end) {
-  let i
-  let map = {}
-
-  for (i = start; i <= end; ++i) {
-    map[key(list[i])] = i;
-  }
-  return map;
-}
 
 function isUndefined (val) {
   return 'undefined' === typeof(val)
