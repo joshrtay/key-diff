@@ -45,28 +45,24 @@ function diff (prev, next, effect, equal) {
       pEnd = back(prev, pEnd)
       nStart = forward(next, nStart)
     } else {
-      if (isUndefined(keyToIdx)) {
-        keyToIdx = mapKeyToIdx(prev, prev.idx, pEnd.idx)
-      }
-      idxInPrev = keyToIdx[key(nStart)]
-      if (isUndefined(idxInPrev)) {
-        effect(DIFF_CREATE, null, nStart.item, nStart.idx)
-      } else {
-        effect(DIFF_MOVE, prev[idxInPrev], nStart.item, nStart.idx)
-        delete keyToIdx[key(nStart)]
-      }
-      nStart = forward(next, nStart)
+      break
     }
   }
 
-  if (pStart.idx > pEnd.idx) {
-    for (; nStart.idx <= nEnd.idx; nStart = forward(next, nStart)) {
-      effect(DIFF_CREATE, null, nStart.item, nEnd.idx)
+  keyToIdx = mapKeyToIdx(prev, pStart.idx, pEnd.idx)
+  for (; nStart.idx <= nEnd.idx; nStart = forward(next, nStart)) {
+    idxInPrev = keyToIdx[key(nStart.item)]
+    if (isUndefined(idxInPrev)) {
+      effect(DIFF_CREATE, null, nStart.item, nStart.idx)
+    } else {
+      effect(DIFF_MOVE, prev[idxInPrev], nStart.item, nStart.idx)
+      delete keyToIdx[key(nStart.item)]
     }
-  } else if (nStart.idx > nEnd.idx) {
-    for(; pStart.idx <= pEnd.idx; pStart = forward(prev, pStart)) {
-      effect(DIFF_REMOVE, pStart.item)
-    }
+  }
+
+  for (let key in keyToIdx) {
+    idxInPrev = keyToIdx[key]
+    effect(DIFF_REMOVE, prev[idxInPrev])
   }
 
 }
@@ -89,21 +85,19 @@ function back (list, c) {
 }
 
 function defaultEqual(prev, next) {
-  return key(prev) === key(next)
+  return key(prev.item, prev.idx) === key(next.item, next.idx)
 }
 
-function key(cursor) {
-  return cursor.item.key || cursor.idx
+function key(item, idx) {
+  return item.key || idx
 }
 
 function mapKeyToIdx(list, start, end) {
   let i
-  let key
   let map = {}
 
   for (i = start; i <= end; ++i) {
-    key = list[i].key;
-    if (!isUndefined(key)) map[key] = i;
+    map[key(list[i])] = i;
   }
   return map;
 }

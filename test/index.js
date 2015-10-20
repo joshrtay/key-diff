@@ -202,6 +202,7 @@ test('complex', (t) => {
   let a = [{key: 'foo', val: 'one'}, {key: 'bar', val: 'two'}, {key: 'baz', val: 'three'}]
   let b = [{key: 'bar', val: 'two'}, {key: 'foo', val: 'one'},  {key: 'bat', val: 'four'}]
   let c = clone(a)
+
   let patch = update(c)
 
   diff(a, b, patch)
