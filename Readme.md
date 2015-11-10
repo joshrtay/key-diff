@@ -3,7 +3,9 @@
 
 [![Codeship Status for joshrtay/key-diff](https://img.shields.io/codeship/6ecc3110-581f-0133-40c0-26e98ecb9625/master.svg)](https://codeship.com/projects/109614)  [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
-A list diff algorightm with support for keys
+A list diff algorightm with support for keys.
+
+This was an experiment to develop an api. Use [dift](https://github.com/ashaffer/dift) insted.
 
 ## Installation
 
